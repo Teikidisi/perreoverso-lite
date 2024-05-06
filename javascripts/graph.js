@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 // const server = "http://localhost:3000";
 // async function getDataFromURL(urlAddress) {
 //   const response = await fetch(`${server}/${urlAddress}`);
@@ -276,20 +274,31 @@ function createGraph(nodes, links) {
     versoModal.parentNode.removeChild(versoModal);
 
     versoModal = createModal(link.Verso);
-    versoModal.visibility = "visible";
+    versoModal.visibility = "hidden";
+    let Xcoord = 0;
+
     mouseY < vh / 2
       ? (versoModal.style.top = mouseY)
       : (versoModal.style.top = mouseY - resultH);
     mouseX < vw / 2
       ? (versoModal.style.left = mouseX)
-      : (versoModal.style.left = mouseX - resultW);
-    setTimeout(() => {
-      DeleteModals();
-    }, 4000);
+      : (versoModal.style.left = Xcoord);
+    if (mouseX < vw / 2) {
+      mouseX + resultW > vw ? (Xcoord = vw - resultW) : (Xcoord = mouseX);
+    } else {
+      mouseX - resultW < 0 ? (Xcoord = 0) : (Xcoord = mouseX - resultW);
+    }
+    versoModal.style.left = Xcoord;
 
     document.body.appendChild(versoModal);
   });
   //Graph.warmupTicks(10);
+
+  Graph.onBackgroundClick(() => {
+    DeleteModals();
+  }).onZoom(() => {
+    DeleteModals();
+  });
 }
 
 function DeleteModals() {
@@ -306,5 +315,6 @@ function createModal(linkText) {
   versoModal.style.font = "normal 20px Poppins";
   versoModal.classList.add("modalLinkText");
   versoModal.style.position = "absolute";
+  versoModal.style.border = "1px black solid";
   return versoModal;
 }

@@ -35,10 +35,10 @@ retrieveInfo().then(() => {
     authorGroupRelations
   );
 
-  console.log(links);
+  //console.log(links);
 
   const preparedNodes = prepareNodes(nodes);
-  console.log(preparedNodes);
+  // console.log(preparedNodes);
 
   createGraph(preparedNodes, links);
 });
@@ -191,7 +191,7 @@ function createGraph(nodes, links) {
     })
     .linkDirectionalArrowLength(100)
     .linkDirectionalArrowRelPos(0.95)
-    .linkLabel("Verso")
+    //.linkLabel("Verso")
     .linkColor((link) => {
       if (link.isSongReference) {
         return "#81B1E2";
@@ -202,7 +202,7 @@ function createGraph(nodes, links) {
       }
     })
     .linkWidth(5);
-
+  //.linkHoverPrecision([4])
   Graph.d3Force("link").distance((l) => {
     if (!l.isSongReference && l.IDTarget.includes("c")) {
       return 800;
@@ -257,6 +257,7 @@ function createGraph(nodes, links) {
     node.fx = node.x;
     node.fy = node.y;
   });
+
   Graph.onLinkClick((link) => {
     DeleteModals();
 
@@ -264,17 +265,27 @@ function createGraph(nodes, links) {
       return;
     }
 
-    const versoModal = document.createElement("div");
-    const versoText = document.createTextNode(link.Verso);
-    versoModal.appendChild(versoText);
-    versoModal.style.position = "absolute";
-    versoModal.style.top = mouseY;
-    versoModal.style.left = mouseX;
-    versoModal.style.font = "normal 20px Poppins";
-    versoModal.classList.add("modalLinkText");
+    const vw = document.documentElement.clientWidth;
+    const vh = document.documentElement.clientHeight;
+
+    let versoModal = createModal(link.Verso);
+    versoModal.style.visibility = "hidden";
+    document.body.appendChild(versoModal);
+    const resultH = versoModal.offsetHeight;
+    const resultW = versoModal.offsetWidth;
+    versoModal.parentNode.removeChild(versoModal);
+
+    versoModal = createModal(link.Verso);
+    versoModal.visibility = "visible";
+    mouseY < vh / 2
+      ? (versoModal.style.top = mouseY)
+      : (versoModal.style.top = mouseY - resultH);
+    mouseX < vw / 2
+      ? (versoModal.style.left = mouseX)
+      : (versoModal.style.left = mouseX - resultW);
     setTimeout(() => {
       DeleteModals();
-    }, 3000);
+    }, 4000);
 
     document.body.appendChild(versoModal);
   });
@@ -286,4 +297,14 @@ function DeleteModals() {
   existingModals.forEach((modal) => {
     modal.remove();
   });
+}
+
+function createModal(linkText) {
+  let versoModal = document.createElement("div");
+  const versoText = document.createTextNode(linkText);
+  versoModal.appendChild(versoText);
+  versoModal.style.font = "normal 20px Poppins";
+  versoModal.classList.add("modalLinkText");
+  versoModal.style.position = "absolute";
+  return versoModal;
 }

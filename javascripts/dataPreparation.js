@@ -4,8 +4,7 @@ function initialDataSetup(
   authors,
   songRelations,
   songArtistRelations,
-  authorSongRelations,
-  authorGroupRelations
+  authorSongRelations
 ) {
   const modifiedIDSongs = songs.map((song) => {
     return {
@@ -40,13 +39,6 @@ function initialDataSetup(
       IDTarget: "c" + relation.IDTarget,
     };
   });
-  const modifiedIDAuthorGroupLinks = authorGroupRelations.map((relation) => {
-    return {
-      ...relation,
-      IDSource: "a" + relation.IDSource,
-      IDTarget: "a" + relation.IDTarget,
-    };
-  });
 
   const referencedAuthors = modifiedIDAuthors.filter((author) => {
     return modifiedIDSongAuthorLinks.find((link) => {
@@ -65,8 +57,7 @@ function initialDataSetup(
   const joinedNodes = modifiedIDSongs.concat(formattedAuthorsforSongNodes);
   const joinedLinks = modifiedIDSongLinks.concat(
     modifiedIDAuthorSongLinks,
-    modifiedIDSongAuthorLinks,
-    modifiedIDAuthorGroupLinks
+    modifiedIDSongAuthorLinks
   );
   return [joinedNodes, joinedLinks];
 }
@@ -75,9 +66,9 @@ function prepareNodes(nodes) {
   const preparedNodes = nodes.map((node) => {
     const img = new Image();
     if (node.cancion_id.includes("c")) {
-      img.src = `public/images/albums/${node.AlbumPic}`;
+      img.src = `https://storage.googleapis.com/perreoverso/ALBUMES/${node.AlbumPic}`;
     } else {
-      img.src = `public/images/artistas/${node.AlbumPic}`;
+      img.src = `https://storage.googleapis.com/perreoverso/ARTISTAS/${node.AlbumPic}`;
     }
     let autorString = "";
     if (node.Autor != null) {
@@ -97,4 +88,39 @@ function prepareNodes(nodes) {
     };
   });
   return preparedNodes;
+}
+
+function populateSongWithPerformers(authors, songs, performersRelation) {
+  let organizedSongs = songs.map((song) => {
+    const locatedRelations = performersRelation.filter(
+      (x) => x.IDCancion == song.cancion_id
+    );
+    let totalRelationsForSong = locatedRelations.length;
+    let artistas = [];
+    for (const author of authors) {
+      if (totalRelationsForSong != 0) {
+        if (
+          locatedRelations.find(
+            (relation) => relation.IDAutor == author.autor_id
+          ) != undefined
+        ) {
+          totalRelationsForSong -= 1;
+          artistas.push({
+            idAutor: author.autor_id,
+            NombreAutor: author.Nombre,
+          });
+        }
+      } else {
+        break;
+      }
+    }
+
+    return {
+      cancion_id: song.cancion_id,
+      Nombre: song.Nombre,
+      Autor: artistas,
+      AlbumPic: song.AlbumPic,
+    };
+  });
+  return organizedSongs;
 }

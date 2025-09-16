@@ -9,6 +9,7 @@ async function retrieveInfo() {
   [
     songs,
     authors,
+    songPerformmers,
     songRelations,
     songArtistRelations,
     authorSongRelations,
@@ -16,27 +17,31 @@ async function retrieveInfo() {
   ] = await Promise.all([
     getSongs(),
     getAuthors(),
+    getSongPerformers(),
     getSongSongRelations(),
     getSongArtistRelations(),
     getAuthorSongRelations(),
-    getAuthorGroupRelations(),
   ]);
 }
 
 retrieveInfo().then(() => {
-  const [nodes, links] = initialDataSetup(
+  let populatedSongs = populateSongWithPerformers(
+    authors,
     songs,
+    songPerformers
+  );
+  const [nodes, links] = initialDataSetup(
+    populatedSongs,
     authors,
     songRelations,
     songArtistRelations,
-    authorSongRelations,
-    authorGroupRelations
+    authorSongRelations
   );
 
   //console.log(links);
 
   const preparedNodes = prepareNodes(nodes);
-  // console.log(preparedNodes);
+  //console.log(preparedNodes);
 
   createGraph(preparedNodes, links);
 });
@@ -189,7 +194,7 @@ function createGraph(nodes, links) {
     })
     .linkDirectionalArrowLength(100)
     .linkDirectionalArrowRelPos(0.95)
-    //.linkLabel("Verso")
+    .linkLabel("Verso")
     .linkColor((link) => {
       if (link.isSongReference) {
         return "#81B1E2";

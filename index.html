@@ -33,26 +33,52 @@
       <h1 class="title">Perreoverso</h1>
       <h3 class="slogan-subtitle">El multiverso del perreo</h3>
     </div>
-    <div class="graph-parent">
-      <div id="graph"></div>
-      <div class="legend">
-        <p class="legend-title">Referencias entre:</p>
-        <div class="legend-entry">
-          <div class="cancion-cancion"></div>
-          <label>Canción a canción</label>
+    <div class="main-container">
+      <div class="graph-parent">
+        <div id="graph"></div>
+        <div class="legend">
+          <p class="legend-title">Referencias entre:</p>
+          <div class="legend-entry">
+            <div class="cancion-cancion"></div>
+            <label>Canción a canción</label>
+          </div>
+          <div class="legend-entry">
+            <div class="cancion-artista"></div>
+            <label>Canción a artista</label>
+          </div>
+          <div class="legend-entry">
+            <div class="artista-cancion"></div>
+            <label>Artista a canción</label>
+          </div>
         </div>
-        <div class="legend-entry">
-          <div class="cancion-artista"></div>
-          <label>Canción a artista</label>
-        </div>
-        <div class="legend-entry">
-          <div class="artista-cancion"></div>
-          <label>Artista a canción</label>
+      </div>
+      <div id="autorgraph"></div>
+      <div class="modal-back">
+        <div id="modalBox">
+          <ul>
+            <li>
+              Para desplazarte sobre la gráfica, dejale aplastado al fondo
+              blanco del mapa y deslizate
+            </li>
+            <li>Puedes hacer zoom con los dedos o la rueda del mouse</li>
+            <li>
+              Picar una línea mostrará la letra donde se hace referencia a un
+              artista o una canción
+            </li>
+            <li>Picar una tarjeta la centrará y se acercará a ella.</li>
+            <li>
+              Puedes agarrar y mover de lugares las tarjetas y fijarlas en un
+              solo sitio
+            </li>
+          </ul>
+          <button type="button" class="modal-button">Cerrar</button>
         </div>
       </div>
     </div>
-    <div id="autorgraph"></div>
-    <div id="modalBox"></div>
+    <script
+      type="application/javascript"
+      src="./javascripts/pageManipulation.js"
+    ></script>
     <script
       type="application/javascript"
       src="./javascripts/csvCalls.js"

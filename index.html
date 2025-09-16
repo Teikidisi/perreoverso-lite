@@ -29,8 +29,28 @@
 
   <body>
     <script id="entry-template" type="text/x-handlebars-template"></script>
-    <h1>Perreoverso</h1>
-    <div id="graph"></div>
+    <div class="title-box">
+      <h1 class="title">Perreoverso</h1>
+      <h3 class="slogan-subtitle">El multiverso del perreo</h3>
+    </div>
+    <div class="graph-parent">
+      <div id="graph"></div>
+      <div class="legend">
+        <p class="legend-title">Referencias entre:</p>
+        <div class="legend-entry">
+          <div class="cancion-cancion"></div>
+          <label>Canción a canción</label>
+        </div>
+        <div class="legend-entry">
+          <div class="cancion-artista"></div>
+          <label>Canción a artista</label>
+        </div>
+        <div class="legend-entry">
+          <div class="artista-cancion"></div>
+          <label>Artista a canción</label>
+        </div>
+      </div>
+    </div>
     <div id="autorgraph"></div>
     <div id="modalBox"></div>
     <script

@@ -38,7 +38,7 @@ retrieveInfo().then(() => {
     authorSongRelations
   );
 
-  //console.log(links);
+  console.log(links);
 
   const preparedNodes = prepareNodes(nodes);
   //console.log(preparedNodes);
@@ -61,7 +61,7 @@ function createGraph(nodes, links) {
   };
   const Graph = ForceGraph()(canvasSquare)
     .graphData(gData)
-    .width(window.innerWidth)
+    .width(window.innerWidth - window.innerWidth * 0.04)
     .height(window.innerHeight / 1.2)
     .nodeId("id")
     .linkSource("IDSource")
@@ -196,9 +196,9 @@ function createGraph(nodes, links) {
     .linkDirectionalArrowRelPos(0.95)
     .linkLabel("Verso")
     .linkColor((link) => {
-      if (link.isSongReference) {
+      if (link.IDTarget.includes("c") && link.IDSource.includes("c")) {
         return "#81B1E2";
-      } else if (!link.isSongReference && link.IDTarget.includes("c")) {
+      } else if (link.IDSource.includes("c") && link.IDTarget.includes("a")) {
         return "#ffcfcf";
       } else {
         return "#fd3c2e";
